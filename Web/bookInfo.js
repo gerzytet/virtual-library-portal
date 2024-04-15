@@ -39,7 +39,7 @@ function displayBooks() {
             <p><strong>Year:</strong> ${book.year}</p>
             <p><strong>ISBN:</strong> ${book.isbn}</p>
             <p><strong>Category:</strong> ${book.category}</p>
-            <hr> <!-- Add a horizontal line between books for separation -->
+            <hr> 
         `;
 
         bookInfoElement.innerHTML = bookDataString;
