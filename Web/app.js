@@ -5,7 +5,7 @@ displayBooks.addEventListener('click', () => {
 });
 
 logoutButton.addEventListener('click', () => {
-	window.location.href = 'login.html';
+	window.location.href = 'index.html';
 });
 
 
