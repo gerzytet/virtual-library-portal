@@ -1,0 +1,195 @@
+body, html {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: 'Roboto', sans-serif; 
+    background-color: #e4f2e4; 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.full-container, .container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 10px; 
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+    overflow: auto;
+}
+
+.full-container {
+    width: 100%;
+    height: 100vh;
+}
+
+.container {
+    width: 300px;
+    margin: auto;
+}
+
+.header, .headerBar {
+    background-color: #ffffff; 
+    color: #fff;
+    padding: 10px;
+    text-align: right; 
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between; 
+    align-items: center;
+}
+
+.headerBar {
+    background-color: #282e28; 
+    color: #fff;
+    padding: 10px;
+    text-align: right;
+    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.logout-button, #logoutButton {
+    background-color: transparent;
+    color: #fff;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+}
+
+.logout-button:hover, #logoutButton:hover {
+    color: #ff5555; 
+}
+
+#filterForm {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+#filterForm input,
+#filterForm select,
+#filterForm button,
+input[type="text"],
+input[type="password"],
+input[type="email"] {
+    height: 40px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    background-color: white;
+    box-sizing: border-box;
+}
+
+#filterForm button,
+button {
+    background-color: #88c28a; 
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 25px; 
+    transition: background-color 0.3s ease;
+}
+
+#filterForm button:hover,
+button:hover {
+    background-color: #5f9961; 
+}
+
+#bookList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-container form {
+    display: flex;
+    flex-direction: column;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+.message {
+    font-size: 0.9em;
+    text-align: center;
+    margin-top: 20px;
+}
+
+.message a {
+    color: #5c6bc0;
+    text-decoration: none;
+}
+
+#verificationInfo {
+    text-align: center;
+    padding: 20px;
+}
+
+.verify-message {
+    margin: 20px 0;
+    line-height: 1.5;
+}
+
+#userEmail {
+    font-weight: bold;
+}
+
+.button {
+    display: inline-block;
+    text-decoration: none;
+    background-color: #88c28a; 
+    color: white;
+    border: none; 
+    padding: 12px 24px; 
+    margin: 10px; 
+    cursor: pointer;
+    border-radius: 25px; 
+    transition: background-color 0.3s ease; 
+}
+
+.welcome-box, .book-box {
+    background-color: #fff;
+    padding: 40px; 
+    margin: 20px auto;
+    max-width: 800px;
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px;
+}
+.welcome-box h2 {
+    font-size: 36px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+button {
+    background-color: #88c28a; 
+    color: #fff;
+    border: none;
+    padding: 12px 24px;
+    margin: 10px;
+    cursor: pointer;
+    border-radius: 25px; 
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #5f9961; 
+}
+
+@media (max-width: 768px) {
+    .buttons {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    button {
+        width: 100%; 
+    }
+}
+
+
