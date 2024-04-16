@@ -2,6 +2,7 @@ import express from 'express'
 import bodyParser from 'body-parser'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+import ejs from 'ejs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,6 +15,9 @@ var server = express();
 //  res.send('Hello World');
 //});
 
+server.set('view engine', 'ejs');
+server.engine('html', ejs.renderFile);
+
 server.use(bodyParser.urlencoded({ extended: true }));
 
 server.use('/', (req, res, next) => {
@@ -21,6 +25,31 @@ server.use('/', (req, res, next) => {
   console.log("body: ", req.body)
   console.log("path: ", req.path)
   next()
+})
+
+class Book {
+  constructor(title, author, publisher, year, isbn, category) {
+      this.title = title;
+      this.author = author;
+      this.publisher = publisher;
+      this.year = year;
+      this.isbn = isbn;
+      this.category = category;
+  }
+}
+
+// Create an array of books
+const books = [
+  new Book('JavaScript: The Good Parts', 'Douglas Crockford', 'O\'Reilly Media', 2008, '978-0596517748', 'Programming'),
+  new Book('Clean Code: A Handbook of Agile Software Craftsmanship', 'Robert C. Martin', 'Prentice Hall', 2008, '978-0132350884', 'Programming'),
+  new Book('The Hitchhiker\'s Guide to the Galaxy', 'Douglas Adams', 'Pan Books', 1979, '978-0330258647', 'Science Fiction'),
+  // Add more books as needed
+];
+
+books.push(books[0])
+
+server.get('/book-info.html', (req, res, next) => {
+  res.render(__dirname + '/Web/book-info.html', {books: books});
 })
 
 server.post('/index.html', (req, res, next) => {

@@ -2,7 +2,6 @@ function handleHomeButtonClick() {
     window.location.href = 'homepage.html';
 }
 
-
 const homeButton = document.getElementById('homeButton');
 homeButton.addEventListener('click', handleHomeButtonClick);
 
@@ -25,21 +24,6 @@ const books = [
     // Add more books as needed
 ];
 
-/*function addNewBooks() {
-
-	const searchParams = new URLSearchParams(window.location.search);
-	if(searchParams.has('addBookName')){
-		books.push(new Book(
-		searchParams.get('addBookName'), 
-		searchParams.get('addBookAuthor'), 
-		searchParams.get('addBookPublisher'), 
-		searchParams.get('addBookYear'), 
-		searchParams.get('addBookISBN'), 
-		searchParams.get('addBookCategory')));
-	}
-}
-*/
-
 function displayBooks() {
     const bookContainer = document.getElementById('bookContainer');
 
@@ -55,7 +39,7 @@ function displayBooks() {
             <p><strong>Year:</strong> ${book.year}</p>
             <p><strong>ISBN:</strong> ${book.isbn}</p>
             <p><strong>Category:</strong> ${book.category}</p>
-            <hr> 
+            <hr>
         `;
 
         bookInfoElement.innerHTML = bookDataString;
@@ -64,10 +48,4 @@ function displayBooks() {
     });
 }
 
-//addNewBooks();
 displayBooks();
-
-
-
-
-
