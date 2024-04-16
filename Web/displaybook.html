@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Books</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="full-container">
+    <div class="header">
+        <h1>LOGO</h1>
+        <a href="logout.html" class="logout-button">Logout</a>
+    </div>
+    <h2>Display Books</h2>
+    <form id="filterForm">
+        <input type="text" id="filterName" placeholder="Book Name">
+        <input type="text" id="filterAuthor" placeholder="Author">
+        <input type="number" id="filterYear" placeholder="Year">
+        <select id="filterCategory">
+            <option value="">Category</option>
+            <!-- Populate categories dynamically -->
+        </select>
+        <button type="submit">Filter</button>
+    </form>
+    <div id="bookList">
+        <!-- Books will be rendered here -->
+    </div>
+</div>
+<script src="app.js"></script>
+</body>
+</html>
