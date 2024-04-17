@@ -21,6 +21,10 @@ export class User {
     getBookCollection() {
         return defaultBooks;
     }
+
+    addBook(book) {
+        defaultBooks.push(book);
+    }
 }
 
 //return a User object for the given username

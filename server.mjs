@@ -4,6 +4,7 @@ import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import ejs from 'ejs';
 import { User, Book, checkCredentials, getUser } from './data_interface.mjs'
+import { get } from 'http';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -23,7 +24,7 @@ server.use(bodyParser.urlencoded({ extended: true }));
 
 server.use('/', (req, res, next) => {
   console.log('Request Type:', req.method)
-  //console.log("body: ", req.body)
+  console.log("body: ", req.body)
   console.log("path: ", req.path)
   next()
 })
@@ -31,7 +32,7 @@ server.use('/', (req, res, next) => {
 //books.push(books[0])
 
 server.get('/book-info.html', (req, res, next) => {
-  res.render(__dirname + '/Web/book-info.html', {books: books});
+  res.render(__dirname + '/Web/book-info.html', {books: getUser("username").getBookCollection()});
 })
 
 server.get('/', (req, res, next) => {
@@ -51,6 +52,20 @@ server.post('/index.html', (req, res, next) => {
     res.render(__dirname + '/Web/index.html', {login_failed: true});
   }
 })
+
+server.post("/add-confirmation.html", (req, res, next) => {
+  let book = new Book(
+    req.body.addBookName,
+    req.body.addBookAuthor,
+    req.body.addBookPublisher,
+    req.body.addBookYear,
+    req.body.addBookISBN,
+    req.body.addBookCategory
+  )
+  getUser("username").addBook(book)
+  res.sendFile(__dirname + '/Web/homepage.html');
+})
+
 server.use(express.static('Web'));
 
 server.listen(port, hostname, () => {
