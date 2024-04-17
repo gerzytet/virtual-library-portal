@@ -66,6 +66,12 @@ server.post("/add-confirmation.html", (req, res, next) => {
   res.sendFile(__dirname + '/Web/homepage.html');
 })
 
+server.post("/removeBooks.html", (req, res, next) => {
+  let isbn = req.body.removeBookISBN
+  getUser("username").removeByISBN(isbn)
+  res.sendFile(__dirname + '/Web/homepage.html');
+})
+
 server.use(express.static('Web'));
 
 server.listen(port, hostname, () => {

@@ -10,7 +10,7 @@ export class Book {
   }
 
 // Create an array of books
-const defaultBooks = [
+var defaultBooks = [
     new Book('JavaScript: The Good Parts', 'Douglas Crockford', 'O\'Reilly Media', 2008, '978-0596517748', 'Programming'),
     new Book('Clean Code: A Handbook of Agile Software Craftsmanship', 'Robert C. Martin', 'Prentice Hall', 2008, '978-0132350884', 'Programming'),
     new Book('The Hitchhiker\'s Guide to the Galaxy', 'Douglas Adams', 'Pan Books', 1979, '978-0330258647', 'Science Fiction'),
@@ -24,6 +24,10 @@ export class User {
 
     addBook(book) {
         defaultBooks.push(book);
+    }
+
+    removeByISBN(isbn) {
+        defaultBooks = defaultBooks.filter(book => book.isbn !== isbn);
     }
 }
 

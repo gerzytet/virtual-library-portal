@@ -47,5 +47,3 @@ function displayBooks() {
         bookContainer.appendChild(bookInfoElement);
     });
 }
-
-displayBooks();
