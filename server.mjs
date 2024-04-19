@@ -5,6 +5,9 @@ import { dirname } from 'path';
 import ejs from 'ejs';
 import { User, Book, checkCredentials, getUser } from './data_interface.mjs'
 import { get } from 'http';
+import pkg from 'pg';
+const { Client } = pkg;
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -76,4 +79,21 @@ server.use(express.static('Web'));
 
 server.listen(port, hostname, () => {
   console.log(`Server running at http://${hostname}:${port}/`);
+  // Create a new PostgreSQL client instance
+  const client = new Client({
+    user: 'nuke', // Your PostgreSQL username
+    host: 'localhost', // Use localhost to connect to the PostgreSQL server running on the same machine
+    database: 'test', // Your PostgreSQL database name
+    password: 'server', // Your PostgreSQL password
+    port: 5432 // Your PostgreSQL port
+  });
+
+  // Connect to the PostgreSQL database
+  client.connect()
+    .then(() => console.log('Connected to the database'))
+    .catch(err => console.error('Error connecting to the database', err))
+    .finally(() => {
+      // Close the client connection
+      client.end();
+  });
 });
