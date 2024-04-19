@@ -1,6 +1,11 @@
+const fetch = require('node-fetch'); // Import the 'node-fetch' library for making HTTP requests
+
+
 function handleHomeButtonClick() {
     window.location.href = 'homepage.html';
 }
+
+
 
 const homeButton = document.getElementById('homeButton');
 homeButton.addEventListener('click', handleHomeButtonClick);
@@ -23,6 +28,8 @@ const books = [
     new Book('The Hitchhiker\'s Guide to the Galaxy', 'Douglas Adams', 'Pan Books', 1979, '978-0330258647', 'Science Fiction'),
     // Add more books as needed
 ];
+
+
 
 function displayBooks() {
     const bookContainer = document.getElementById('bookContainer');
@@ -47,3 +54,40 @@ function displayBooks() {
         bookContainer.appendChild(bookInfoElement);
     });
 }
+
+const fetch = require('node-fetch'); // Import the 'node-fetch' library for making HTTP requests
+
+// Define the book data
+const bookData = {
+    addBookName: 'Example Book',
+    addBookAuthor: 'John Doe',
+    addBookPublisher: 'Example Publisher',
+    addBookYear: 2024,
+    addBookISBN: '1234567890',
+    addBookCategory: 'Fiction'
+};
+
+// Define the URL of the server
+const serverUrl = 'http://localhost:3000'; // Assuming the server is running locally on port 3000
+
+// Define the request parameters
+const requestOptions = {
+    method: 'POST',
+    headers: {
+        'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(bookData) // Convert bookData to JSON format and send it in the request body
+};
+
+// Send the POST request
+fetch(`${serverUrl}/add-confirmation.html`, requestOptions)
+    .then(response => {
+        if (response.ok) {
+            console.log('Book added successfully!');
+        } else {
+            console.error('Failed to add book:', response.statusText);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
