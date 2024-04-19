@@ -3,10 +3,7 @@ import bodyParser from 'body-parser'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import ejs from 'ejs';
-import { User, Book, checkCredentials, getUser } from './data_interface.mjs'
-import { get } from 'http';
-import pkg from 'pg';
-const { Client } = pkg;
+import { User, Book, checkCredentials, getUser, initDatabaseConnection } from './data_interface.mjs'
 
 
 const __filename = fileURLToPath(import.meta.url);
@@ -23,7 +20,7 @@ var server = express();
 server.set('view engine', 'ejs');
 server.engine('html', ejs.renderFile);
 
-server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.urlencoded({ extended: true }));initDatabaseConnection
 
 server.use('/', (req, res, next) => {
   console.log('Request Type:', req.method)
@@ -46,8 +43,8 @@ server.get('/index.html', (req, res, next) => {
   res.render(__dirname + '/Web/index.html', {login_failed: false});
 })
 
-server.post('/index.html', (req, res, next) => {
-  if (checkCredentials(req.body.username, req.body.password)) {
+server.post('/index.html', async (req, res, next) => {
+  if (await checkCredentials(req.body.username, req.body.password)) {
     console.log('Username: ' + req.body.username);
     console.log('Password: ' + req.body.password);
     res.sendFile(__dirname + '/Web/homepage.html');
@@ -78,22 +75,12 @@ server.post("/removeBooks.html", (req, res, next) => {
 server.use(express.static('Web'));
 
 server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
-  // Create a new PostgreSQL client instance
-  const client = new Client({
-    user: 'nuke', // Your PostgreSQL username
-    host: 'localhost', // Use localhost to connect to the PostgreSQL server running on the same machine
-    database: 'test', // Your PostgreSQL database name
-    password: 'server', // Your PostgreSQL password
-    port: 5432 // Your PostgreSQL port
-  });
-
-  // Connect to the PostgreSQL database
-  client.connect()
-    .then(() => console.log('Connected to the database'))
-    .catch(err => console.error('Error connecting to the database', err))
-    .finally(() => {
-      // Close the client connection
-      client.end();
-  });
+  initDatabaseConnection(
+  () => {
+    console.log('Server running at http://' + hostname + ':' + port + '/');
+  }
+  ,() => {
+    console.log('Failed to connect to the database');
+    server.close();
+  })
 });
