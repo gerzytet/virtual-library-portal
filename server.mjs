@@ -32,7 +32,7 @@ server.use('/', (req, res, next) => {
 //books.push(books[0])
 
 server.get('/book-info.html', (req, res, next) => {
-  res.render(__dirname + '/Web/book-info.html', {books: getUser("username").getBookCollection()});
+  res.render(__dirname + '/Web/book-info.html', {books: getUser("username").getBookCollection("username", "password")});
 })
 
 server.get('/', (req, res, next) => {
