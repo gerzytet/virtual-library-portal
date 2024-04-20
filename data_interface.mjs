@@ -80,10 +80,10 @@ export function initDatabaseConnection(successCallback, failureCallback) {
 
   // Create a new PostgreSQL client instance
   client = new Client({
-    user: credentials.user, // Your PostgreSQL username
+    user: 'nuke', // Your PostgreSQL username
     host: 'localhost', // Use localhost to connect to the PostgreSQL server running on the same machine
     database: 'test', // Your PostgreSQL database name
-    password: credentials.password, // Your PostgreSQL password
+    password: 'server', // Your PostgreSQL password
     port: 5432 // Your PostgreSQL port
   });
 
