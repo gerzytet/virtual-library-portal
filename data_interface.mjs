@@ -22,12 +22,38 @@ var defaultBooks = [
 ];
 
 export class User {
-    getBookCollection() {
-        return defaultBooks;
+    constructor(){
+    }
+    async getBookCollection(username, password) {
+        try {
+            // Get user ID by querying the database with username and password
+            const userIdResult = await client.query('SELECT id FROM users WHERE username = $1 AND password = $2', [username, password]);
+            const userId = userIdResult.rows[0].id;
+
+            // Retrieve books associated with the user ID
+            const booksResult = await client.query('SELECT * FROM books WHERE user_id = $1', [userId]);
+            const books = booksResult.rows.map(row => new Book(row.title, row.author, row.publisher, row.year, row.isbn, row.category));
+
+            console.log('Books for user', username, ':', books);
+        } catch (error) {
+            console.error('Error displaying books:', error);
+        }
     }
 
-    addBook(book) {
-        defaultBooks.push(book);
+    async addBook(book, username) {
+        try {
+            // Get user ID by querying the database with username and password
+            const userIdResult = await client.query('SELECT id FROM users WHERE username = $1', [username]);
+            const userId = userIdResult.rows[0].id;
+
+            // Insert book into the database with user ID
+            const result = await client.query('INSERT INTO books (title, author, publisher, year, isbn, category, user_id) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
+                [book.title, book.author, book.publisher, book.year, book.isbn, book.category, userId]);
+
+            console.log('Book added successfully12:', result.rows[0]);
+        } catch (error) {
+            console.error('Error adding book:', error);
+        }
     }
 
     removeByISBN(isbn) {

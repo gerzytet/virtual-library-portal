@@ -62,7 +62,7 @@ server.post("/add-confirmation.html", (req, res, next) => {
     req.body.addBookISBN,
     req.body.addBookCategory
   )
-  getUser("username").addBook(book)
+  getUser("username").addBook(book,"username");
   res.sendFile(__dirname + '/Web/homepage.html');
 })
 
