@@ -1,3 +1,7 @@
+import fs from 'fs';
+import pkg from 'pg';
+const { Client } = pkg;
+
 export class Book {
     constructor(title, author, publisher, year, isbn, category) {
         this.title = title;
@@ -37,6 +41,30 @@ export function getUser(username) {
 }
 
 //return true if the given username and password are valid credentials
-export function checkCredentials(username, password) {
+export async function checkCredentials(username, password) {
+    let result = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password])
+    return result.rowCount > 0;
     return username === 'username' && password === 'password';
+}
+
+var client;
+
+export function initDatabaseConnection(successCallback, failureCallback) {
+    var credentials = JSON.parse(fs.readFileSync('db_credentials.json', 'utf8'));
+
+  // Create a new PostgreSQL client instance
+  client = new Client({
+    user: credentials.user, // Your PostgreSQL username
+    host: 'localhost', // Use localhost to connect to the PostgreSQL server running on the same machine
+    database: 'test', // Your PostgreSQL database name
+    password: credentials.password, // Your PostgreSQL password
+    port: 5432 // Your PostgreSQL port
+  });
+
+  // Connect to the PostgreSQL database
+  client.connect()
+    .then(successCallback)
+    .catch(err => {console.error('Error connecting to the database', err); failureCallback();})
+    .finally(() => {
+  });
 }

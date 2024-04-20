@@ -3,8 +3,8 @@ import bodyParser from 'body-parser'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import ejs from 'ejs';
-import { User, Book, checkCredentials, getUser } from './data_interface.mjs'
-import { get } from 'http';
+import { User, Book, checkCredentials, getUser, initDatabaseConnection } from './data_interface.mjs'
+
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -20,7 +20,7 @@ var server = express();
 server.set('view engine', 'ejs');
 server.engine('html', ejs.renderFile);
 
-server.use(bodyParser.urlencoded({ extended: true }));
+server.use(bodyParser.urlencoded({ extended: true }));initDatabaseConnection
 
 server.use('/', (req, res, next) => {
   console.log('Request Type:', req.method)
@@ -43,8 +43,8 @@ server.get('/index.html', (req, res, next) => {
   res.render(__dirname + '/Web/index.html', {login_failed: false});
 })
 
-server.post('/index.html', (req, res, next) => {
-  if (checkCredentials(req.body.username, req.body.password)) {
+server.post('/index.html', async (req, res, next) => {
+  if (await checkCredentials(req.body.username, req.body.password)) {
     console.log('Username: ' + req.body.username);
     console.log('Password: ' + req.body.password);
     res.sendFile(__dirname + '/Web/homepage.html');
@@ -75,5 +75,12 @@ server.post("/removeBooks.html", (req, res, next) => {
 server.use(express.static('Web'));
 
 server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`);
+  initDatabaseConnection(
+  () => {
+    console.log('Server running at http://' + hostname + ':' + port + '/');
+  }
+  ,() => {
+    console.log('Failed to connect to the database');
+    server.close();
+  })
 });
