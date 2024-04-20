@@ -28,7 +28,7 @@ export class User {
         try {
             // Get user ID by querying the database with username and password
             const userIdResult = await client.query('SELECT userid FROM users WHERE username = $1 AND password = $2', [username, password]);
-            const userId = userIdResult.rows[0].id;
+            const userId = userIdResult.rows[0].userid;
 
             // Retrieve books associated with the user ID
             const booksResult = await client.query('SELECT * FROM books WHERE userid = $1', [userId]);
@@ -44,7 +44,7 @@ export class User {
         try {
             // Get user ID by querying the database with username and password
             const userIdResult = await client.query('SELECT userid FROM users WHERE username = $1', [username]);
-            const userId = userIdResult.rows[0].id;
+            const userId = userIdResult.rows[0].userid;
 
             // Insert book into the database with user ID
             const result = await client.query('INSERT INTO books (title, author, publisher, year, isbn, category, userid) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
