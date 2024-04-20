@@ -55,7 +55,7 @@ function displayBooks() {
     });
 }
 
-const fetch = require('node-fetch'); // Import the 'node-fetch' library for making HTTP requests
+//const fetch = require('node-fetch'); // Import the 'node-fetch' library for making HTTP requests
 
 // Define the book data
 const bookData = {
