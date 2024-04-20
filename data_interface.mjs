@@ -83,7 +83,7 @@ export function initDatabaseConnection(successCallback, failureCallback) {
     user: 'nuke', // Your PostgreSQL username
     host: 'localhost', // Use localhost to connect to the PostgreSQL server running on the same machine
     database: 'test', // Your PostgreSQL database name
-    password: 'se', // Your PostgreSQL password
+    password: 'server', // Your PostgreSQL password
     port: 5432 // Your PostgreSQL port
   });
 
