@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import ejs from 'ejs';
-import { User, Book, checkCredentials, getUser, initDatabaseConnection } from './data_interface.mjs'
+import { User, Book, checkCredentials, getUser, initDatabaseConnection, isUsernameAvailable, createUser, validateUserData } from './data_interface.mjs'
 import jwt from 'jsonwebtoken'
 import { randomInt } from 'crypto';
 import cookieParser from 'cookie-parser';
@@ -52,6 +52,26 @@ server.post('/index.html', async (req, res, next) => {
   }
 })
 
+server.get('/Signup.html', (req, res, next) => {
+  res.sendFile(__dirname + '/Web/Signup.html');
+})
+
+server.post('/Signup.html', async (req, res, next) => {
+  let newUsername = req.body.newUsername
+  let newEmail = req.body.email
+  let newPassword = req.body.newPassword
+  console.log("newUsername: ", newUsername)
+  console.log("newEmail: ", newEmail)
+  console.log("newPassword: ", newPassword)
+  if (validateUserData(newUsername, newEmail, newPassword) && await isUsernameAvailable(newUsername)) {
+    await createUser(newUsername, newEmail, newPassword)
+    res.render(__dirname + '/Web/index.html', {login_failed: false});
+  } else {
+    res.sendFile(__dirname + '/Web/Signup.html');
+  }
+})
+//server authentication wall.
+//any route after this will require a valid jwt token
 server.use('/', (req, res, next) => {
   console.log('Request Type:', req.method)
   console.log("body: ", req.body)

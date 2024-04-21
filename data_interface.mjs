@@ -1,3 +1,4 @@
+import e from 'express';
 import fs from 'fs';
 import pkg from 'pg';
 const { Client } = pkg;
@@ -69,11 +70,26 @@ export function getUser(username) {
     return new User(username);
 }
 
+export async function isUsernameAvailable(username) {
+    let result = await client.query('SELECT * FROM users WHERE username = $1', [username])
+    return result.rowCount === 0;
+}
+
+export function validateUserData(username, email, password) {
+    return username && email && password &&
+        username.length > 0 && email.length > 0 && password.length > 0 &&
+        email.includes('@') && email.includes('.');
+}
+
+export async function createUser(username, email, password) {
+    let result = await client.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, password])
+    return result.rowCount > 0;
+}
+
 //return true if the given username and password are valid credentials
 export async function checkCredentials(username, password) {
     let result = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password])
     return result.rowCount > 0;
-    return username === 'username' && password === 'password';
 }
 
 var client;
