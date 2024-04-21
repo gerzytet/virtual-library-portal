@@ -8,27 +8,52 @@
 </head>
 <body>
 	<header class=headerBar>
-        <button id="logoutButton">Logout</button>
-    </header>
-	
-	<div class="welcome-box">
-        <h2>Welcome To Your Virtual Library</h2>
-    
-		<div class="space">
+		<button id="logoutButton">Logout</button>
+	</header>
+	 <div class="container">
+		<div class="left-column">
+			<div class="welcome-box">
+				<h2>Welcome To Your Virtual Library</h2>
+			
+				<div class="space">
+				</div>
+			
+				<div class="buttons">
+					<button id="addBooks">add book</button>
+					<button id="searchBooks">search books</button>
+				</div>
+			</div>
+			<div id="searchFormContainer" class="searchFormContainer"> </div>
+			<div id="addFormContainer" class="addFormContainer"> </div>
 		</div>
-	
-		<div class="buttons">
-			<button id="addBooks">add book</button>
-			<button id="searchBooks">search books</button>
-			<button id="removeBooks">remove book</button>
-			<button id="displayBooks">display books</button>
+		<div class="right-column">
+			<div class="bookContainer">
+				<div class="welcome-box">
+					<h2>Your Bookshelf:</h2>
+					<div class="space"> </div>
+					<div id="bookContainer">
+						<% for (let i = 0; i < books.length; i++) {
+							var book = books[i]%>
+							<div class="book-info">
+								<p><strong>Title:</strong> <%= book.title%></p>
+								<p><strong>Author:</strong> <%=book.author %></p>
+								<p><strong>Publisher:</strong> <%=book.publisher %></p>
+								<p><strong>Year:</strong> <%=book.year %></p>
+								<p><strong>ISBN:</strong> <%=book.isbn %></p>
+								<p><strong>Category:</strong> <%=book.category %></p>
+								<button id="imageButton" type="button">
+									<img src="delete.png" alt="Default Image" id="buttonImage">
+									<img src="recycle-bin.png" alt="Hover Image" id="buttonHoverImage">
+
+								</button>
+								<hr>
+							</div>
+						<% } %>
+					</div>
+				</div>
+			</div>
 		</div>
-		
-		
 	</div>
-	
-	<div id="bookContainer"></div>
-	
     <script src="app.js"></script>
 </body>
 </html>
