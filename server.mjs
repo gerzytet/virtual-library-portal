@@ -49,9 +49,14 @@ server.get('/index.html', (req, res, next) => {
   res.render(__dirname + '/Web/index.html', {login_failed: false});
 })
 
-//css files
+//css file for login screen doesn't need authentication
 server.get('/style.css', (req, res, next) => {
   res.sendFile(__dirname + '/Web/style.css');
+})
+
+//neither does the logo
+server.get('/logo.png', (req, res, next) => {
+  res.sendFile(__dirname + '/Web/logo.png');
 })
 
 server.post('/index.html', async (req, res, next) => {
