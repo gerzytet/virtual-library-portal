@@ -22,33 +22,36 @@ var defaultBooks = [
 ];
 
 export class User {
-    constructor(){
+    constructor(username){
+        this.username = username;
     }
-    async getBookCollection(username, password) {
+    async getBookCollection() {
         try {
             // Get user ID by querying the database with username and password
-            const userIdResult = await client.query('SELECT userid FROM users WHERE username = $1 AND password = $2', [username, password]);
+            const userIdResult = await client.query('SELECT userid FROM users WHERE username = $1', [this.username]);
             const userId = userIdResult.rows[0].userid;
 
             // Retrieve books associated with the user ID
-            const booksResult = await client.query('SELECT * FROM books WHERE userid = $1', [userId]);
+            const booksResult = await client.query('SELECT * FROM Books WHERE userid = $1', [userId]);
             const books = booksResult.rows.map(row => new Book(row.title, row.author, row.publisher, row.year, row.isbn, row.category));
 
-            console.log('Books for user', username, ':', books);
+            console.log('Books for user', this.username, ':', books);
+            return books
         } catch (error) {
             console.error('Error displaying books:', error);
         }
     }
 
-    async addBook(book, username) {
+    async addBook(book) {
         try {
             // Get user ID by querying the database with username and password
-            const userIdResult = await client.query('SELECT userid FROM users WHERE username = $1', [username]);
+            const userIdResult = await client.query('SELECT userid FROM users WHERE username = $1', [this.username]);
             const userId = userIdResult.rows[0].userid;
 
             // Insert book into the database with user ID
-            const result = await client.query('INSERT INTO books (title, author, publisher, year, isbn, category, userid) VALUES ($1, $2, $3, $4, $5, $6, $7)', 
+            const result = await client.query('INSERT INTO books (title, author, publisher, yearPublished, isbn, category, userid) VALUES ($1, $2, $3, $4, $5, $6, $7)',
                 [book.title, book.author, book.publisher, book.year, book.isbn, book.category, userId]);
+            console.log("row count: ", result.rowCount)
 
             console.log('Book added successfully12:', result.rows[0]);
         } catch (error) {
@@ -63,7 +66,7 @@ export class User {
 
 //return a User object for the given username
 export function getUser(username) {
-    return new User();
+    return new User(username);
 }
 
 //return true if the given username and password are valid credentials
@@ -80,10 +83,10 @@ export function initDatabaseConnection(successCallback, failureCallback) {
 
   // Create a new PostgreSQL client instance
   client = new Client({
-    user: 'nuke', // Your PostgreSQL username
+    user: credentials.user, // Your PostgreSQL username
     host: 'localhost', // Use localhost to connect to the PostgreSQL server running on the same machine
     database: 'test', // Your PostgreSQL database name
-    password: 'server', // Your PostgreSQL password
+    password: credentials.password, // Your PostgreSQL password
     port: 5432 // Your PostgreSQL port
   });
 
