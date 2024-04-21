@@ -45,7 +45,7 @@ server.post('/index.html', async (req, res, next) => {
   if (await checkCredentials(req.body.username, req.body.password)) {
     console.log('Username: ' + req.body.username);
     console.log('Password: ' + req.body.password);
-    res.cookie("token", jwt.sign({username: req.body.username}, jwt_secret), {httpOnly: true, sameSite: 'strict'})
+    res.cookie("token", jwt.sign({username: req.body.username}, jwt_secret, {expiresIn: "4h"}), {httpOnly: true, sameSite: 'strict'})
     res.sendFile(__dirname + '/Web/homepage.html');
   } else {
     res.render(__dirname + '/Web/index.html', {login_failed: true});
