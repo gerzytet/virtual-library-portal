@@ -28,6 +28,54 @@ body {
     color: #ff5555;
 }
 
+#imageButton {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
+#buttonHoverImage {
+    display: none;
+}
+
+#imageButton:hover #buttonImage {
+    display: none;
+}
+
+#imageButton:hover #buttonHoverImage {
+    display: block;
+}
+
+#imageButton img {
+    width: 20px; /* Adjust width as needed */
+    height: 20px; /* Maintain aspect ratio */
+}
+
+#buttonHoverImage img {
+	width: 10px;
+	height: auto;
+
+}
+
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    max-width: 1200px; /* Adjust as needed */
+    margin: 0 auto;
+    padding: 10px;
+}
+
+/* Left column styles */
+.left-column {
+    width: 48%; /* Adjust width as needed */
+}
+
+/* Right column styles */
+.right-column {
+    width: 48%; /* Adjust width as needed */
+}
+
 .space{
 	padding: 5px;
 }
@@ -41,13 +89,35 @@ body {
     box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
     border-radius: 10px; 
 }
-.book-box {
+
+.form-container {
     background-color: #fff; 
-    padding: 20px; 
+    padding: 40px; 
     margin: 20px auto; 
     max-width: 800px; 
     text-align: center;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); 
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
+    border-radius: 10px; 
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+input[type="text"] {
+    width: 100%;
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.book-box {
+    background-color: #fff; 
+    padding: 40px; 
+    margin: 20px auto; 
+    max-width: 800px; 
+    text-align: center;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); 
     border-radius: 10px; 
 }
 
@@ -79,10 +149,6 @@ button:hover {
     background-color: #5f9961; 
 }
 
-#bookContainer {
-    margin: 40px auto;
-    max-width: 800px; 
-}
 
 @media (max-width: 768px) {
     .buttons {
@@ -92,5 +158,13 @@ button:hover {
 
     button {
         width: 100%; 
+    }
+	 .container {
+        flex-direction: column;
+    }
+
+    .left-column,
+    .right-column {
+        width: 100%;
     }
 }
