@@ -9,6 +9,11 @@ body, html {
     align-items: center;
 }
 
+#logo {
+	height: 200px;
+	width: auto;
+}
+
 .full-container, .container {
     background-color: #fff;
     padding: 20px;
@@ -30,11 +35,9 @@ body, html {
 .header, .headerBar {
     background-color: #ffffff; 
     color: #fff;
-    padding: 10px;
     text-align: right; 
-    box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
-    display: flex;
-    justify-content: space-between; 
+	display: flex;
+    justify-content: center; 
     align-items: center;
 }
 
