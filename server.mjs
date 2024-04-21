@@ -59,7 +59,7 @@ server.post('/index.html', async (req, res, next) => {
     console.log('Username: ' + req.body.username);
     console.log('Password: ' + req.body.password);
     res.cookie("token", jwt.sign({username: req.body.username}, jwt_secret, {expiresIn: "4h"}), {httpOnly: true, sameSite: 'strict'})
-    res.sendFile(__dirname + '/Web/homepage.html');
+    res.redirect('/homepage.html');
   } else {
     res.render(__dirname + '/Web/index.html', {login_failed: true});
   }
@@ -80,7 +80,7 @@ server.post('/Signup.html', async (req, res, next) => {
     await createUser(newUsername, newEmail, newPassword)
     res.render(__dirname + '/Web/index.html', {login_failed: false});
   } else {
-    res.sendFile(__dirname + '/Web/Signup.html');
+    res.redirect('/Web/index.html');
   }
 })
 //server authentication wall.
@@ -96,7 +96,7 @@ server.use('/', (req, res, next) => {
     next()
   } catch (err) {
     if (err instanceof jwt.JsonWebTokenError) {
-      res.render(__dirname + '/Web/index.html', {login_failed: false});
+      res.redirect('/index.html');
     } else {
       throw err
     }
@@ -107,6 +107,41 @@ server.use('/', (req, res, next) => {
 
 server.get('/book-info.html', async (req, res, next) => {
   res.render(__dirname + '/Web/book-info.html', {books: await getUser(req.username).getBookCollection()});
+})
+
+server.get('/homepage.html', async (req, res, next) => {
+  res.render(__dirname + '/Web/homepage.html', {books: await getUser(req.username).getBookCollection()});
+})
+
+function containsNoUndefined(arr) {
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] === undefined) {
+      return false
+    }
+  }
+  return true
+}
+
+server.post('/homepage.html', async (req, res, next) => {
+  var add_book_params = [req.body.addBookName,
+    req.body.addBookAuthor,
+    req.body.addBookPublisher,
+    req.body.addBookYear,
+    req.body.addBookISBN,
+    req.body.addBookCategory]
+  console.log("add_book_params: ", add_book_params);
+  if (containsNoUndefined(add_book_params)) {
+    let book = new Book(
+      req.body.addBookName,
+      req.body.addBookAuthor,
+      req.body.addBookPublisher,
+      req.body.addBookYear,
+      req.body.addBookISBN,
+      req.body.addBookCategory
+    );
+    await getUser(req.username).addBook(book);
+    res.render(__dirname + '/Web/homepage.html', {books: await getUser(req.username).getBookCollection()});
+  }
 })
 
 server.get('/', (req, res, next) => {

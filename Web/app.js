@@ -20,14 +20,14 @@ document.addEventListener('DOMContentLoaded', () => {
 				<div class="form-group">
 					<input type="text" id="addBookAuthor" name="addBookAuthor" placeholder="Author" maxlength="35">
 				</div>
-				<div class="form-group">				
+				<div class="form-group">
 					<input type="text" id="addBookPublisher" name="addBookPublisher" placeholder="Publisher" maxlength="35">
 				</div>
 				<div class="form-group">
-					<input type="text" pattern="\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
+					<input type="text" pattern="\\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
 				</div>
 				<div class="form-group">
-					<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" pattern="\d{3}-\d{10}">
+					<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" pattern="\\d{3}-\\d{10}">
 				</div>
 				<div class="form-group">
 					<input type="text" id="addBookCategory" name="addBookCategory" placeholder="Category" maxlength="25">
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		</div>`
 		addFormContainer.innerHTML = addFormHTML;
 	}
-	
+
 
 	});
 });
@@ -69,13 +69,13 @@ document.addEventListener('DOMContentLoaded', () => {
 					<div class="form-group">
 						<input type="text" id="addBookPublisher" name="addBookPublisher" placeholder="Publisher" maxlength="35">
 					</div>
-					<div class="form-group">	
+					<div class="form-group">
 						<input type="text" pattern="\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
-					</div>	
+					</div>
 					<div class="form-group">
 						<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" maxlength="13" minlength="13">
 					</div>
-					<div class="form-group">	
+					<div class="form-group">
 						<input type="text" id="addBookCategory" name="addBookCategory" placeholder="Category" maxlength="25">
 					</div>
 					<div class="form-group">
