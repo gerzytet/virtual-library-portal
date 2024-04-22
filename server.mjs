@@ -15,7 +15,11 @@ const mailgun_key = readFileSync('mailgun_key.txt', 'utf8').trim();
 
 const mg = mailgun.client({username: 'api', key: mailgun_key});
 
+var emails_left = 20; //limit emails to 20 per day to prevent spamming in a primitive way
 function sendVerificationEmail(email, url) {
+  if (emails_left-- <= 0) {
+    return;
+  }
   mg.messages.create('virtual-library-portal.tech', {
     from: "Virtual Library Portal <registration@virtual-library-portal.tech>",
     to: [email],
