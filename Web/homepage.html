@@ -1,64 +1,160 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
-	<link rel="stylesheet" href="styles.css">
-	<link rel="icon" href="icon.png">
-</head>
-<body>
-	<header class=headerBar>
-		<button id="logoutButton">Logout</button>
-	</header>
-	 <div class="container">
-		<div class="left-column">
-			<div class="welcome-box">
-				<h2>Welcome To Your Virtual Library</h2>
+const logoutButton = document.getElementById('logoutButton');
 
-				<div class="space">
+document.addEventListener('DOMContentLoaded', () => {
+	const editBooksButton = document.getElementById('editButton');
+	editBooksButton.addEventListener('click', () => {
+	if (editFormContainer) {
+		
+		addFormContainer.innerHTML = '';
+		searchFormContainer.innerHTML = '';
+		editFormContainer.innerHTML = '';
+		const editFormHTML = `
+		<div class = form-container>
+			<h2>Edit Book Information!</h2>
+			<p> Can edit any fields </p>
+			<hr>
+			<div class=space> </div>
+			<div class=space> </div>
+				<form id="addForm" method="POST">
+				<div class="form-group">
+					<input type="text" id="addBookName" name="addBookName" placeholder="Book Name" maxlength="35" required>
 				</div>
-
-				<div class="buttons">
-					<button id="addBooks">add book</button>
-					<button id="searchBooks">search books</button>
+				<div class="form-group">
+					<input type="text" id="addBookAuthor" name="addBookAuthor" placeholder="Author" maxlength="35">
 				</div>
-			</div>
-			<div id="searchFormContainer" class="searchFormContainer"> </div>
-			<div id="addFormContainer" class="addFormContainer"> </div>
-		</div>
-		<div class="right-column">
-			<div class="bookContainer">
-				<div class="welcome-box">
-					<h2>Your Bookshelf:</h2>
-					<div class="space"> </div>
-					<div id="bookContainer">
-						<% for (let i = 0; i < books.length; i++) {
-							var book = books[i]%>
-							<div class="book-info">
-								<p><strong>Title:</strong> <%= book.title%></p>
-								<p><strong>Author:</strong> <%=book.author %></p>
-								<p><strong>Publisher:</strong> <%=book.publisher %></p>
-								<p><strong>Year:</strong> <%=book.year %></p>
-								<p><strong>ISBN:</strong> <%=book.isbn %></p>
-								<p><strong>Category:</strong> <%=book.category %></p>
-								<button id="imageButton" type="button" onclick="deleteBook(<%= book.id %>)">
-									<img src="delete.png" alt="Default Image" id="buttonImage">
-									<img src="recycle-bin.png" alt="Hover Image" id="buttonHoverImage">
-								</button>
-								<button id="imageButton" type="button">
-									<img src="edit-hover.png" alt="Default Image" id="buttonImage">
-									<img src="edit.png" alt="Hover Image" id="buttonHoverImage">
+				<div class="form-group">
+					<input type="text" id="addBookPublisher" name="addBookPublisher" placeholder="Publisher" maxlength="35">
+				</div>
+				<div class="form-group">
+					<input type="text" pattern="\\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" pattern="\\d{3}-\\d{10}">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookCategory" name="addBookCategory" placeholder="Category" maxlength="25">
+				</div>
+				<div class="form-group">
+					<button id="submitBook" type="submit">Confirm Changes!</button>
+				</div>
+				</form>
+		</div>`
+		editFormContainer.innerHTML = editFormHTML;
+	}
 
-								</button>
-								<hr>
-							</div>
-						<% } %>
+
+	});
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
+	const addBooksButton = document.getElementById('addBooks');
+	addBooksButton.addEventListener('click', () => {
+	if (addFormContainer) {
+		addFormContainer.innerHTML = '';
+		editFormContainer.innerHTML = '';
+		searchFormContainer.innerHTML = '';
+		const addFormHTML = `
+		<div class = form-container>
+			<h2>Add a Book!</h2>
+			<p> Must enter a title to add a book </p>
+			<hr>
+			<div class=space> </div>
+			<div class=space> </div>
+				<form id="addForm" method="POST" action="add_book">
+				<div class="form-group">
+					<input type="text" id="addBookName" name="addBookName" placeholder="Book Name" maxlength="35" required>
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookAuthor" name="addBookAuthor" placeholder="Author" maxlength="35">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookPublisher" name="addBookPublisher" placeholder="Publisher" maxlength="35">
+				</div>
+				<div class="form-group">
+					<input type="text" pattern="\\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" pattern="\\d{3}-\\d{10}">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookCategory" name="addBookCategory" placeholder="Category" maxlength="25">
+				</div>
+				<div class="form-group">
+					<button id="submitBook" type="submit">Add!</button>
+				</div>
+				</form>
+		</div>`
+		addFormContainer.innerHTML = addFormHTML;
+	}
+
+
+	});
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const searchBooksButton = document.getElementById('searchBooks');
+
+    searchBooksButton.addEventListener('click', () => {
+        const searchFormContainer = document.getElementById('searchFormContainer');
+        if (searchFormContainer) {
+            searchFormContainer.innerHTML = '';
+			addFormContainer.innerHTML = '';
+			editFormContainer.innerHTML = '';
+
+            const searchFormHTML = `
+			<div class=form-container>
+				<h2>Search For a Book!</h2>
+				<p> Can search for books using any field </p>
+				<hr>
+				<div class=space> </div>
+				<div class=space> </div>
+				<form id="searchForm" method="POST">
+					<div class="form-group">
+						<input type="text" id="addBookName" name="addBookName" placeholder="Book Name" maxlength="35">
 					</div>
-				</div>
+					<div class="form-group">
+						<input type="text" id="addBookAuthor" name="addBookAuthor" placeholder="Author" maxlength="35">
+					</div>
+					<div class="form-group">
+						<input type="text" id="addBookPublisher" name="addBookPublisher" placeholder="Publisher" maxlength="35">
+					</div>
+					<div class="form-group">
+						<input type="text" pattern="\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
+					</div>
+					<div class="form-group">
+						<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" maxlength="13" minlength="13">
+					</div>
+					<div class="form-group">
+						<input type="text" id="addBookCategory" name="addBookCategory" placeholder="Category" maxlength="25">
+					</div>
+					<div class="form-group">
+						<button id="searchBook" type="submit">Search!</button>
+					</div>
+				</form>
 			</div>
-		</div>
-	</div>
-    <script src="app.js"></script>
-</body>
-</html>
+            `;
+
+            searchFormContainer.innerHTML = searchFormHTML;
+        }
+    });
+});
+
+
+logoutButton.addEventListener('click', () => {
+	window.location.href = 'index.html';
+});
+
+function deleteBook(bookId) {
+	let data = new URLSearchParams();
+	data.append("deleteBookId", bookId);
+
+	fetch("/delete_book", {
+		body: data,
+		method: "post"
+	}).then(response => {
+		if (response.ok) {
+			window.location.reload();
+		}
+	});
+}
