@@ -1,10 +1,59 @@
 const logoutButton = document.getElementById('logoutButton');
 
 document.addEventListener('DOMContentLoaded', () => {
+	const editBooksButton = document.getElementById('editButton');
+	editBooksButton.addEventListener('click', () => {
+	if (editFormContainer) {
+		
+		addFormContainer.innerHTML = '';
+		searchFormContainer.innerHTML = '';
+		editFormContainer.innerHTML = '';
+		const editFormHTML = `
+		<div class = form-container>
+			<h2>Edit Book Information!</h2>
+			<p> Can edit any fields </p>
+			<hr>
+			<div class=space> </div>
+			<div class=space> </div>
+				<form id="addForm" method="POST">
+				<div class="form-group">
+					<input type="text" id="addBookName" name="addBookName" placeholder="Book Name" maxlength="35" required>
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookAuthor" name="addBookAuthor" placeholder="Author" maxlength="35">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookPublisher" name="addBookPublisher" placeholder="Publisher" maxlength="35">
+				</div>
+				<div class="form-group">
+					<input type="text" pattern="\\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" pattern="\\d{3}-\\d{10}">
+				</div>
+				<div class="form-group">
+					<input type="text" id="addBookCategory" name="addBookCategory" placeholder="Category" maxlength="25">
+				</div>
+				<div class="form-group">
+					<button id="submitBook" type="submit">Confirm Changes!</button>
+				</div>
+				</form>
+		</div>`
+		editFormContainer.innerHTML = editFormHTML;
+	}
+
+
+	});
+});
+
+
+
+document.addEventListener('DOMContentLoaded', () => {
 	const addBooksButton = document.getElementById('addBooks');
 	addBooksButton.addEventListener('click', () => {
 	if (addFormContainer) {
 		addFormContainer.innerHTML = '';
+		editFormContainer.innerHTML = '';
 		searchFormContainer.innerHTML = '';
 		const addFormHTML = `
 		<div class = form-container>
@@ -51,6 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (searchFormContainer) {
             searchFormContainer.innerHTML = '';
 			addFormContainer.innerHTML = '';
+			editFormContainer.innerHTML = '';
 
             const searchFormHTML = `
 			<div class=form-container>
