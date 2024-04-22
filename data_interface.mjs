@@ -113,3 +113,17 @@ export function initDatabaseConnection(successCallback, failureCallback) {
     .finally(() => {
   });
 }
+
+var pendingUsers = [];
+
+export function addPendingUser(username, email, password) {
+    pendingUsers.push({username, email, password});
+}
+
+export async function confirmRegistration(username) {
+    var user = pendingUsers.find(user => user.username === username);
+    if (user) {
+        await createUser(user.username, user.email, user.password);
+        pendingUsers = pendingUsers.filter(user => user.username !== username);
+    }
+}

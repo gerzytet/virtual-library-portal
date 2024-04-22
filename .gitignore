@@ -130,3 +130,4 @@ dist
 .pnp.*
 
 db_credentials.json
+mailgun_key.txt

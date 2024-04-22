@@ -21,8 +21,10 @@
             <input type="password" id="password" name="password" placeholder="Password" required>
             <button type="submit">Sign In</button>
             <p class="message">Don't have an account? <a href="Signup.html">Sign Up</a></p>
-            <% if (login_failed) { %>
+            <% if (status === "login_failed") { %>
                 <p>Login Failed, try again</p>
+            <% } else if (status === "registration_failed") { %>
+                <p>Invalid or expired registration link</p>
             <% } %>
         </form>
     </div>

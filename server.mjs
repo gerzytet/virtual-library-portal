@@ -3,23 +3,27 @@ import bodyParser from 'body-parser'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import ejs from 'ejs';
-import { User, Book, checkCredentials, getUser, initDatabaseConnection, isUsernameAvailable, createUser, validateUserData } from './data_interface.mjs'
+import { addPendingUser, confirmRegistration, User, Book, checkCredentials, getUser, initDatabaseConnection, isUsernameAvailable, createUser, validateUserData } from './data_interface.mjs'
 import jwt from 'jsonwebtoken'
 import { randomInt } from 'crypto';
 import cookieParser from 'cookie-parser';
 import formData from 'form-data';
 import Mailgun from 'mailgun.js';
-/*const mailgun = new Mailgun(formData);
-const mg = mailgun.client({username: 'api', key: process.env.MAILGUN_API_KEY || 'key-yourkeyhere'});
-mg.messages.create('sandbox-123.mailgun.org', {
-	from: "Excited User <mailgun@sandbox-123.mailgun.org>",
-	to: ["test@example.com"],
-	subject: "Hello",
-	text: "Testing some Mailgun awesomeness!",
-	html: "<h1>Testing some Mailgun awesomeness!</h1>"
-})*/
+import { readFileSync } from 'fs';
+const mailgun = new Mailgun(formData);
+const mailgun_key = readFileSync('mailgun_key.txt', 'utf8').trim();
 
+const mg = mailgun.client({username: 'api', key: mailgun_key});
 
+function sendVerificationEmail(email, url) {
+  mg.messages.create('virtual-library-portal.tech', {
+    from: "Virtual Library Portal <registration@virtual-library-portal.tech>",
+    to: [email],
+    subject: "Verify your account",
+    text: "Your vertification link is:" + url,
+    html: "Your vertification link is:" + url
+  })
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -28,13 +32,9 @@ const hostname = '127.0.0.1';
 const port = 3000;
 
 var server = express();
-//server.get('/', (req, res) => {
-//  res.send('Hello World');
-//});
+server.use(cookieParser());
 
-server.use(cookieParser())
-
-var jwt_secret = ""
+var jwt_secret = "";
 for (let i = 0; i < 64; i++) {
   jwt_secret += String.fromCharCode(randomInt(48, 58));
 }
@@ -46,7 +46,7 @@ server.engine('html', ejs.renderFile);
 server.use(bodyParser.urlencoded({ extended: true }));
 
 server.get('/index.html', (req, res, next) => {
-  res.render(__dirname + '/Web/index.html', {login_failed: false});
+  res.render(__dirname + '/Web/index.html', {status: ""});
 })
 
 //css file for login screen doesn't need authentication
@@ -66,7 +66,7 @@ server.post('/index.html', async (req, res, next) => {
     res.cookie("token", jwt.sign({username: req.body.username}, jwt_secret, {expiresIn: "4h"}), {httpOnly: true, sameSite: 'strict'})
     res.redirect('/homepage.html');
   } else {
-    res.render(__dirname + '/Web/index.html', {login_failed: true});
+    res.render(__dirname + '/Web/index.html', {status: "login_failed"});
   }
 })
 
@@ -82,10 +82,39 @@ server.post('/Signup.html', async (req, res, next) => {
   console.log("newEmail: ", newEmail)
   console.log("newPassword: ", newPassword)
   if (validateUserData(newUsername, newEmail, newPassword) && await isUsernameAvailable(newUsername)) {
-    await createUser(newUsername, newEmail, newPassword)
-    res.render(__dirname + '/Web/index.html', {login_failed: false});
+    //await createUser(newUsername, newEmail, newPassword)
+    addPendingUser(newUsername, newEmail, newPassword)
+    let token = jwt.sign({register_username: newUsername}, jwt_secret, {expiresIn: "12h"})
+    let urlEncodedToken = encodeURIComponent(token)
+    let url = `http://localhost:3000/confirm-registration.html?token=${urlEncodedToken}`
+    console.log("url: ", url)
+    sendVerificationEmail(newEmail, url)
+    res.render(__dirname + '/Web/EmailVerification.html', {email: newEmail});
   } else {
-    res.redirect('/Web/index.html');
+    res.redirect('/index.html');
+  }
+})
+
+server.get('/confirm-registration.html', (req, res, next) => {
+  let token = req.query.token
+  if (token === undefined) {
+    res.render(__dirname + '/Web/index.html', {status: "registration_failed"})
+  } else {
+    try {
+      let token_decoded = jwt.verify(token, jwt_secret)
+      let newUsername = token_decoded.register_username
+      confirmRegistration(newUsername)
+      res.sendFile(__dirname + '/Web/confirm-registration.html');
+    } catch (err) {
+      if (err instanceof jwt.JsonWebTokenError) {
+        res.render(__dirname + '/Web/index.html', {status: "registration_failed"}, (err, html) => {
+          res.location('/index.html')
+          res.send(html)
+        })
+      } else {
+        throw err
+      }
+    }
   }
 })
 //server authentication wall.
@@ -109,7 +138,6 @@ server.use('/', (req, res, next) => {
 })
 
 //books.push(books[0])
-
 server.get('/book-info.html', async (req, res, next) => {
   res.render(__dirname + '/Web/book-info.html', {books: await getUser(req.username).getBookCollection()});
 })
@@ -150,7 +178,7 @@ server.post('/homepage.html', async (req, res, next) => {
 })
 
 server.get('/', (req, res, next) => {
-  res.render(__dirname + '/Web/index.html', {login_failed: false});
+  res.redirect('/index.html');
 })
 
 server.post("/add-confirmation.html", (req, res, next) => {
