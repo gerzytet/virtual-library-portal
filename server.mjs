@@ -160,28 +160,35 @@ function containsNoUndefined(arr) {
 }
 
 server.post('/homepage.html', async (req, res, next) => {
+  res.redirect('/homepage.html');
+})
+
+server.post('/add_book', async (req, res, next) => {
   var add_book_params = [req.body.addBookName,
     req.body.addBookAuthor,
     req.body.addBookPublisher,
     req.body.addBookYear,
     req.body.addBookISBN,
     req.body.addBookCategory]
+    if (containsNoUndefined(add_book_params)) {
+      let book = new Book(
+        req.body.addBookName,
+        req.body.addBookAuthor,
+        req.body.addBookPublisher,
+        req.body.addBookYear,
+        req.body.addBookISBN,
+        req.body.addBookCategory
+      );
+      await getUser(req.username).addBook(book);
+      res.redirect('/homepage.html');
+    }
   //console.log("add_book_params: ", add_book_params);
+})
+
+server.post("/delete_book", async (req, res, next) => {
   var delete_book_params = [req.body.deleteBookId]
-  console.log(req.body)
-  if (containsNoUndefined(add_book_params)) {
-    let book = new Book(
-      req.body.addBookName,
-      req.body.addBookAuthor,
-      req.body.addBookPublisher,
-      req.body.addBookYear,
-      req.body.addBookISBN,
-      req.body.addBookCategory
-    );
-    await getUser(req.username).addBook(book);
-    res.render(__dirname + '/Web/homepage.html', {books: await getUser(req.username).getBookCollection()});
-  } else if (containsNoUndefined(delete_book_params)) {
-    getUser(req.username).removeById(delete_book_params[0]);
+  if (containsNoUndefined(delete_book_params)) {
+    await getUser(req.username).removeById(delete_book_params[0]);
     res.redirect('/homepage.html');
   }
 })

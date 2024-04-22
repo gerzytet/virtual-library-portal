@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', () => {
 			<hr>
 			<div class=space> </div>
 			<div class=space> </div>
-				<form id="addForm" method="POST">
+				<form id="addForm" method="POST" action="add_book">
 				<div class="form-group">
 					<input type="text" id="addBookName" name="addBookName" placeholder="Book Name" maxlength="35" required>
 				</div>
@@ -99,7 +99,7 @@ function deleteBook(bookId) {
 	let data = new URLSearchParams();
 	data.append("deleteBookId", bookId);
 
-	fetch("/homepage.html", {
+	fetch("/delete_book", {
 		body: data,
 		method: "post"
 	}).then(response => {
