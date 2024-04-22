@@ -34,6 +34,12 @@ body {
     padding: 0;
 }
 
+#editButton {
+    border: none;
+    background-color: transparent;
+    padding: 0;
+}
+
 #buttonHoverImage {
     display: none;
 }
@@ -41,8 +47,14 @@ body {
 #imageButton:hover #buttonImage {
     display: none;
 }
+#editButton:hover #buttonImage {
+    display: none;
+}
 
 #imageButton:hover #buttonHoverImage {
+    display: block;
+}
+#editButton:hover #buttonHoverImage {
     display: block;
 }
 
@@ -51,11 +63,23 @@ body {
     height: 20px; /* Maintain aspect ratio */
 }
 
+#editButton img {
+    width: 20px; /* Adjust width as needed */
+    height: 20px; /* Maintain aspect ratio */
+}
+
+
 #buttonHoverImage img {
 	width: 10px;
 	height: auto;
 
 }
+
+#logo img {
+width: 10px;
+heigh: auto;
+}
+
 
 
 .container {
