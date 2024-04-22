@@ -56,12 +56,71 @@ export class User {
             // Insert book into the database with user ID
             const result = await client.query('INSERT INTO books (title, author, publisher, yearPublished, isbn, category, userid) VALUES ($1, $2, $3, $4, $5, $6, $7)',
                 [book.title, book.author, book.publisher, book.year, book.isbn, book.category, userId]);
+            
             console.log("row count: ", result.rowCount)
 
             console.log('Book added successfully12:', result.rows[0]);
         } catch (error) {
             console.error('Error adding book:', error);
         }
+    }
+
+    isNull(value) {
+        return value === null || value === undefined;
+    }
+
+    validateBook(book){
+        if(book.title){
+            if(book.title.length > 100){
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+        if(!this.isNull(book.author)){
+            if(book.author.length > 100){
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+        if(!this.isNull(book.publisher)){
+            if(book.publisher.length > 100){
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+        if(this.isNull(book.year)){
+            return false;
+        }else{
+        for(let i = 0; i < book.year.length; i++){
+            if(!(book.year[i] >= 48 && book.year[i] <= 57)){
+                return false;
+            }
+        }
+        }
+
+
+        if(!this.isNull(book.category)){
+            if(book.category.length > 50){
+                return false;
+            }
+        }else{
+            return false;
+        }
+
+
+        const isbnRegex = /^[0-9]{3}-[0-9]{10}$/;
+        const isValidISBN = isbnRegex.test(isbn);
+
+        if (!isValidISBN) {
+            return false;
+        }
+        return true;
     }
 
     async removeById(bookId) {
