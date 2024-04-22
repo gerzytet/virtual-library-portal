@@ -162,7 +162,9 @@ server.post('/homepage.html', async (req, res, next) => {
     req.body.addBookYear,
     req.body.addBookISBN,
     req.body.addBookCategory]
-  console.log("add_book_params: ", add_book_params);
+  //console.log("add_book_params: ", add_book_params);
+  var delete_book_params = [req.body.deleteBookId]
+  console.log(req.body)
   if (containsNoUndefined(add_book_params)) {
     let book = new Book(
       req.body.addBookName,
@@ -174,6 +176,9 @@ server.post('/homepage.html', async (req, res, next) => {
     );
     await getUser(req.username).addBook(book);
     res.render(__dirname + '/Web/homepage.html', {books: await getUser(req.username).getBookCollection()});
+  } else if (containsNoUndefined(delete_book_params)) {
+    getUser(req.username).removeById(delete_book_params[0]);
+    res.redirect('/homepage.html');
   }
 })
 

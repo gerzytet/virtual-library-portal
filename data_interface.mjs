@@ -34,7 +34,11 @@ export class User {
 
             // Retrieve books associated with the user ID
             const booksResult = await client.query('SELECT * FROM Books WHERE userid = $1', [userId]);
-            const books = booksResult.rows.map(row => new Book(row.title, row.author, row.publisher, row.year, row.isbn, row.category));
+            const books = booksResult.rows.map(row => {
+                let book = new Book(row.title, row.author, row.publisher, row.year, row.isbn, row.category);
+                book.id = row.bookid;
+                return book;
+            });
 
             console.log('Books for user', this.username, ':', books);
             return books
@@ -57,6 +61,16 @@ export class User {
             console.log('Book added successfully12:', result.rows[0]);
         } catch (error) {
             console.error('Error adding book:', error);
+        }
+    }
+
+    async removeById(bookId) {
+        try {
+            // Remove book from the database by book ID
+            const result = await client.query('DELETE FROM books WHERE bookid = $1', [bookId]);
+            console.log('Book removed successfully:', result.rows[0]);
+        } catch (error) {
+            console.error('Error removing book:', error);
         }
     }
 

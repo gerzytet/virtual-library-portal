@@ -14,10 +14,10 @@
 		<div class="left-column">
 			<div class="welcome-box">
 				<h2>Welcome To Your Virtual Library</h2>
-			
+
 				<div class="space">
 				</div>
-			
+
 				<div class="buttons">
 					<button id="addBooks">add book</button>
 					<button id="searchBooks">search books</button>
@@ -41,7 +41,7 @@
 								<p><strong>Year:</strong> <%=book.year %></p>
 								<p><strong>ISBN:</strong> <%=book.isbn %></p>
 								<p><strong>Category:</strong> <%=book.category %></p>
-								<button id="imageButton" type="button">
+								<button id="imageButton" type="button" onclick="deleteBook(<%= book.id %>)">
 									<img src="delete.png" alt="Default Image" id="buttonImage">
 									<img src="recycle-bin.png" alt="Hover Image" id="buttonHoverImage">
 

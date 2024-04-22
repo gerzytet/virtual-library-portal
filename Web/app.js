@@ -95,3 +95,17 @@ logoutButton.addEventListener('click', () => {
 	window.location.href = 'index.html';
 });
 
+function deleteBook(bookId) {
+	let data = new URLSearchParams();
+	data.append("deleteBookId", bookId);
+
+	fetch("/homepage.html", {
+		body: data,
+		method: "post"
+	}).then(response => {
+		if (response.ok) {
+			window.location.reload();
+		}
+	});
+}
+
