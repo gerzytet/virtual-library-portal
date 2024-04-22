@@ -66,6 +66,10 @@ server.get('/index.html', (req, res, next) => {
   res.render(__dirname + '/Web/index.html', {status: ""});
 })
 
+server.get("/icon.png", (req, res, next) => {
+  res.sendFile(__dirname + '/Web/icon.png');
+})
+
 //css file for login screen doesn't need authentication
 server.get('/style.css', (req, res, next) => {
   res.sendFile(__dirname + '/Web/style.css');
