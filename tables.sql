@@ -3,7 +3,7 @@ CREATE TABLE Books (
     Title VARCHAR(100) NOT NULL,
     Author VARCHAR(100) NOT NULL,
     Publisher VARCHAR(100) NOT NULL,
-    YearPublished INTEGER NOT NULL,
+    YearPublished INTEGER,
     ISBN VARCHAR(20) NOT NULL,
     Category VARCHAR(50) NOT NULL,
     UserID INTEGER,

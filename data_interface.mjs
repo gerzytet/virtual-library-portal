@@ -55,8 +55,8 @@ export class User {
 
             // Insert book into the database with user ID
             const result = await client.query('INSERT INTO books (title, author, publisher, yearPublished, isbn, category, userid) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-                [book.title, book.author, book.publisher, book.year, book.isbn, book.category, userId]);
-            
+                [book.title, book.author, book.publisher, book.year === '' ? null : book.year, book.isbn, book.category, userId]);
+
             console.log("row count: ", result.rowCount)
 
             console.log('Book added successfully12:', result.rows[0]);
