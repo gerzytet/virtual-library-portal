@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', () => {
 	const editBooksButton = document.getElementById('editButton');
 	editBooksButton.addEventListener('click', () => {
 	if (editFormContainer) {
-		
+
 		addFormContainer.innerHTML = '';
 		searchFormContainer.innerHTML = '';
 		editFormContainer.innerHTML = '';
@@ -157,4 +157,9 @@ function deleteBook(bookId) {
 			window.location.reload();
 		}
 	});
+}
+
+
+function editBook(bookId) {
+
 }

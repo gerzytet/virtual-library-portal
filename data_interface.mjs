@@ -35,7 +35,7 @@ export class User {
             // Retrieve books associated with the user ID
             const booksResult = await client.query('SELECT * FROM Books WHERE userid = $1', [userId]);
             const books = booksResult.rows.map(row => {
-                let book = new Book(row.title, row.author, row.publisher, row.year, row.isbn, row.category);
+                let book = new Book(row.title, row.author, row.publisher, row.yearpublished, row.isbn, row.category);
                 book.id = row.bookid;
                 return book;
             });

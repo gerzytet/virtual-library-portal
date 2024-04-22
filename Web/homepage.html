@@ -37,17 +37,17 @@
 						<% for (let i = 0; i < books.length; i++) {
 							var book = books[i]%>
 							<div class="book-info">
-								<p><strong>Title:</strong> <%= book.title%></p>
-								<p><strong>Author:</strong> <%=book.author %></p>
-								<p><strong>Publisher:</strong> <%=book.publisher %></p>
-								<p><strong>Year:</strong> <%=book.year %></p>
-								<p><strong>ISBN:</strong> <%=book.isbn %></p>
-								<p><strong>Category:</strong> <%=book.category %></p>
+								<p><strong>Title: </strong><span id=<%= "title"+book.id %>><%= book.title%></span></p>
+								<% if (book.author) { %> <p><strong>Author: </strong><span id=<%= "author"+book.id %>><%=book.author %></span></p> <% } %>
+								<% if (book.publisher) { %> <p><strong>Publisher: </strong><span id=<%= "publisher"+book.id %>><%=book.publisher %></span></p> <% } %>
+								<% if (book.year) { %> <p><strong>Year: </strong><span id=<%= "year"+book.id %>><%=book.year %></span></p> <% } %>
+								<% if (book.isbn) { %> <p><strong>ISBN: </strong><span id=<%= "ISBN"+book.id %>><%=book.isbn %></span></p> <% } %>
+								<% if (book.category) { %> <p><strong>Category: </strong><span id=<%= "category"+book.id %>><%=book.category %></span></p> <% } %>
 								<button id="imageButton" type="button" onclick="deleteBook(<%= book.id %>)">
 									<img src="delete.png" alt="Default Image" id="buttonImage">
 									<img src="recycle-bin.png" alt="Hover Image" id="buttonHoverImage">
 								</button>
-								<button id="editButton" type="button">
+								<button id="editButton" type="button" onclick="editBook(<%= book.id %>)">
 									<img src="edit-hover.png" alt="Default Image" id="buttonImage">
 									<img src="edit.png" alt="Hover Image" id="buttonHoverImage">
 
