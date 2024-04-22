@@ -86,7 +86,7 @@ server.post('/Signup.html', async (req, res, next) => {
     addPendingUser(newUsername, newEmail, newPassword)
     let token = jwt.sign({register_username: newUsername}, jwt_secret, {expiresIn: "12h"})
     let urlEncodedToken = encodeURIComponent(token)
-    let url = `http://localhost:3000/confirm-registration.html?token=${urlEncodedToken}`
+    let url = `https://virtual_library_portal.tech/confirm-registration.html?token=${urlEncodedToken}`
     console.log("url: ", url)
     sendVerificationEmail(newEmail, url)
     res.render(__dirname + '/Web/EmailVerification.html', {email: newEmail});
