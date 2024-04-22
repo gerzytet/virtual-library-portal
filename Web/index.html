@@ -26,7 +26,10 @@
                 <p>Login Failed, try again</p>
             <% } else if (status === "registration_failed") { %>
                 <p>Invalid or expired registration link</p>
+            <% } else if (status === "reset_password_failed") { %>
+                <p>Failed to reset password</p>
             <% } %>
+            <p>Forgot your password? <a href="forgot-password.html">Click here</a></p>
         </form>
     </div>
 </div>

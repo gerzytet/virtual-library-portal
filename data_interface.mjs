@@ -77,6 +77,16 @@ export class User {
     removeByISBN(isbn) {
         defaultBooks = defaultBooks.filter(book => book.isbn !== isbn);
     }
+
+    async setPassword(password) {
+        try {
+            // Update password in the database with username
+            const result = await client.query('UPDATE users SET password = $1 WHERE username = $2', [password, this.username]);
+            console.log('Password updated successfully:', result.rows[0]);
+        } catch (error) {
+            console.error('Error updating password:', error);
+        }
+    }
 }
 
 //return a User object for the given username
@@ -140,4 +150,12 @@ export async function confirmRegistration(username) {
         await createUser(user.username, user.email, user.password);
         pendingUsers = pendingUsers.filter(user => user.username !== username);
     }
+}
+
+export async function findUsernameByEmail(email) {
+    let result = await client.query('SELECT username FROM users WHERE email = $1', [email])
+    if (result.rowCount === 0) {
+        return null;
+    }
+    return result.rows[0].username;
 }

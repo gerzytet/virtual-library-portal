@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import ejs from 'ejs';
-import { addPendingUser, confirmRegistration, User, Book, checkCredentials, getUser, initDatabaseConnection, isUsernameAvailable, createUser, validateUserData } from './data_interface.mjs'
+import { findUsernameByEmail, addPendingUser, confirmRegistration, User, Book, checkCredentials, getUser, initDatabaseConnection, isUsernameAvailable, createUser, validateUserData } from './data_interface.mjs'
 import jwt from 'jsonwebtoken'
 import { randomInt } from 'crypto';
 import cookieParser from 'cookie-parser';
@@ -26,6 +26,19 @@ function sendVerificationEmail(email, url) {
     subject: "Verify your account",
     text: "Your vertification link is:" + url,
     html: "Your vertification link is:" + url
+  })
+}
+
+function sendForgotPasswordEmail(email, url) {
+  if (emails_left-- <= 0) {
+    return;
+  }
+  mg.messages.create('virtual-library-portal.tech', {
+    from: "Virtual Library Portal <registration@virtual-library-portal.tech>",
+    to: [email],
+    subject: "Reset your password",
+    text: "Your password reset link is:" + url,
+    html: "Your password reset link is:" + url
   })
 }
 
@@ -121,6 +134,77 @@ server.get('/confirm-registration.html', (req, res, next) => {
     }
   }
 })
+
+server.post('/forgot_password', (req, res, next) => {
+  let email = req.body.email;
+  if (email) {
+    let username = findUsernameByEmail(email);
+    if (username) {
+      let forgot_token = jwt.sign({forgotPasswordEmail: email}, jwt_secret, {expiresIn: "1h"})
+      let urlEncodedToken = encodeURIComponent(forgot_token)
+      sendForgotPasswordEmail(email, `https://virtual-library-portal.tech/reset-password.html?token=${urlEncodedToken}`)
+      //console.log(`http://localhost:3000/reset-password.html?token=${urlEncodedToken}`)
+    }
+  }
+  res.redirect('/forgot-password-sent.html');
+});
+
+server.get("/forgot-password-sent.html", (req, res, next) => {
+  res.sendFile(__dirname + '/Web/forgot-password-sent.html');
+});
+
+server.get("/forgot-password.html", (req, res, next) => {
+  res.sendFile(__dirname + '/Web/forgot-password.html');
+});
+
+server.get("/reset-password.html", (req, res, next) => {
+  let token = req.query.token
+  if (token === undefined) {
+    res.render(__dirname + '/Web/index.html', {status: "reset_password_failed"})
+  } else {
+    try {
+      let token_decoded = jwt.verify(token, jwt_secret)
+      res.render(__dirname + '/Web/reset-password.html', {token: token})
+    } catch (err) {
+      if (err instanceof jwt.JsonWebTokenError) {
+        res.render(__dirname + '/Web/index.html', {status: "reset_password_failed"}, (err, html) => {
+          res.location('/index.html')
+          res.send(html)
+        })
+      } else {
+        throw err
+      }
+    }
+  }
+});
+
+server.post("/reset-password", async (req, res, next) => {
+  let token = req.body.token
+  let password = req.body.newPassword
+  if (token && password) {
+    try {
+      let token_decoded = jwt.verify(token, jwt_secret)
+      let email = token_decoded.forgotPasswordEmail
+      let username = await findUsernameByEmail(email)
+      if (username) {
+        await getUser(username).setPassword(password)
+        res.redirect('/reset-password-success.html');
+      }
+    } catch (err) {
+      if (err instanceof jwt.JsonWebTokenError) {
+        console.log(err)
+        res.render(__dirname + '/Web/index.html', {status: "reset_password_failed"})
+      } else {
+        throw err
+      }
+    }
+  }
+});
+
+server.get("/reset-password-success.html", (req, res, next) => {
+  res.sendFile(__dirname + '/Web/reset-password-success.html');
+});
+
 //server authentication wall.
 //any route after this will require a valid jwt token
 server.use('/', (req, res, next) => {
@@ -195,25 +279,6 @@ server.post("/delete_book", async (req, res, next) => {
 
 server.get('/', (req, res, next) => {
   res.redirect('/index.html');
-})
-
-server.post("/add-confirmation.html", (req, res, next) => {
-  let book = new Book(
-    req.body.addBookName,
-    req.body.addBookAuthor,
-    req.body.addBookPublisher,
-    req.body.addBookYear,
-    req.body.addBookISBN,
-    req.body.addBookCategory
-  )
-  getUser(req.username).addBook(book);
-  res.sendFile(__dirname + '/Web/homepage.html');
-})
-
-server.post("/removeBooks.html", (req, res, next) => {
-  let isbn = req.body.removeBookISBN
-  getUser().removeByISBN(isbn)
-  res.sendFile(__dirname + '/Web/homepage.html');
 })
 
 server.use(express.static('Web'));
