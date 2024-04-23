@@ -47,6 +47,53 @@ export class User {
         }
     }
 
+    async searchBookCollection(book) {
+        try {
+            let query = 'SELECT * FROM books WHERE 1=1'; // Start with a base query
+            const { title, author, publisher, year, isbn, category } = book;
+            let query_params = [];
+            let param_counter = 1;
+            // Check each field of the book struct and add conditions to the query as necessary
+            if (title !== '') {
+                query += ' AND title LIKE $' + (param_counter++);
+                query_params.push(title);
+            }
+            if (author !== '') {
+                query += ' AND author LIKE $' + (param_counter++);
+                query_params.push(author);
+            }
+            if (publisher !== '') {
+                query += ' AND publisher LIKE $' + (param_counter++);
+                query_params.push(publisher);
+            }
+            if (year !== '') {
+                query += ' AND yearPublished LIKE $' + (param_counter++);
+                query_params.push(year);
+            }
+            if (isbn !== '') {
+                query += ' AND isbn LIKE $' + (param_counter++);
+                query_params.push(isbn);
+            }
+            if (category !== '') {
+                query += ' AND category LIKE $' + (param_counter++);
+                query_params.push(category);
+            }
+
+            console.log(query)
+            for (let i = 0; i < query_params.length; i++) {
+                query_params[i] = '%' + query_params[i] + '%';
+            }
+            // Execute the query with appropriate parameters
+            const result = await client.query(query, query_params);
+
+            // Return the search results
+            return result.rows;
+        } catch (error) {
+            console.error('Error searching for book:', error);
+            throw error; // Rethrow the error for handling in the caller function
+        }
+    }
+
     async addBook(book) {
         try {
             // Get user ID by querying the database with username and password

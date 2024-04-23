@@ -235,7 +235,26 @@ server.get('/book-info.html', async (req, res, next) => {
 })
 
 server.get('/homepage.html', async (req, res, next) => {
-  res.render(__dirname + '/Web/homepage.html', {books: await getUser(req.username).getBookCollection()});
+  let search_params = [req.query.searchBookName,
+    req.query.searchBookAuthor,
+    req.query.searchBookPublisher,
+    req.query.searchBookYear,
+    req.query.searchBookISBN,
+    req.query.searchBookCategory]
+  if (containsNoUndefined(search_params)) {
+    let search_criteria = new Book(
+      req.query.searchBookName,
+      req.query.searchBookAuthor,
+      req.query.searchBookPublisher,
+      req.query.searchBookYear,
+      req.query.searchBookISBN,
+      req.query.searchBookCategory
+    );
+    let search_results = await getUser(req.username).searchBookCollection(search_criteria);
+    res.render(__dirname + '/Web/homepage.html', {books: search_results});
+  } else {
+    res.render(__dirname + '/Web/homepage.html', {books: await getUser(req.username).getBookCollection()});
+  }
 })
 
 function containsNoUndefined(arr) {
@@ -246,10 +265,6 @@ function containsNoUndefined(arr) {
   }
   return true
 }
-
-server.post('/homepage.html', async (req, res, next) => {
-  res.redirect('/homepage.html');
-})
 
 server.post('/add_book', async (req, res, next) => {
   var add_book_params = [req.body.addBookName,
