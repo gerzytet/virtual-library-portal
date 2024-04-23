@@ -1,8 +1,6 @@
 const logoutButton = document.getElementById('logoutButton');
 
-document.addEventListener('DOMContentLoaded', () => {
-	const editBooksButton = document.getElementById('editButton');
-	editBooksButton.addEventListener('click', () => {
+function displayEditForm() {
 	if (editFormContainer) {
 
 		addFormContainer.innerHTML = '';
@@ -15,24 +13,27 @@ document.addEventListener('DOMContentLoaded', () => {
 			<hr>
 			<div class=space> </div>
 			<div class=space> </div>
-				<form id="addForm" method="POST">
+				<form id="editForm" method="POST" action="edit_book">
 				<div class="form-group">
-					<input type="text" id="addBookName" name="addBookName" placeholder="Book Name" maxlength="35" required>
+					<input type="text" id="editBookName" name="editBookName" placeholder="Book Name" maxlength="35" required>
 				</div>
 				<div class="form-group">
-					<input type="text" id="addBookAuthor" name="addBookAuthor" placeholder="Author" maxlength="35">
+					<input type="text" id="editBookAuthor" name="editBookAuthor" placeholder="Author" maxlength="35">
 				</div>
 				<div class="form-group">
-					<input type="text" id="addBookPublisher" name="addBookPublisher" placeholder="Publisher" maxlength="35">
+					<input type="text" id="editBookPublisher" name="editBookPublisher" placeholder="Publisher" maxlength="35">
 				</div>
 				<div class="form-group">
-					<input type="text" pattern="\\d*" id="addBookYear" name="addBookYear" placeholder="Year Published" maxlength="4" minlength="4">
+					<input type="text" pattern="\\d*" id="editBookYear" name="editBookYear" placeholder="Year Published" maxlength="4" minlength="4">
 				</div>
 				<div class="form-group">
-					<input type="text" id="addBookISBN" name="addBookISBN" placeholder="ISBN" pattern="\\d{3}-\\d{10}">
+					<input type="text" id="editBookISBN" name="editBookISBN" placeholder="ISBN" pattern="\\d{3}-\\d{10}">
 				</div>
 				<div class="form-group">
-					<input type="text" id="addBookCategory" name="addBookCategory" placeholder="Category" maxlength="25">
+					<input type="text" id="editBookCategory" name="editBookCategory" placeholder="Category" maxlength="25">
+				</div>
+				<div class="form-group">
+					<input type="text" id="editBookId" name="editBookId" style="display:none">
 				</div>
 				<div class="form-group">
 					<button id="submitBook" type="submit">Confirm Changes!</button>
@@ -41,10 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
 		</div>`
 		editFormContainer.innerHTML = editFormHTML;
 	}
-
-
-	});
-});
+}
 
 
 
@@ -161,5 +159,18 @@ function deleteBook(bookId) {
 
 
 function editBook(bookId) {
+	displayEditForm();
+	let fieldIDs = ["title", "author", "publisher", "year", "ISBN", "category"];
+	let formIDs = ["editBookName", "editBookAuthor", "editBookPublisher", "editBookYear", "editBookISBN", "editBookCategory"];
 
+	for (let i = 0; i < fieldIDs.length; i++) {
+		let field = document.getElementById(fieldIDs[i] + bookId);
+		if (!field) {
+			continue;
+		}
+		let form = document.getElementById(formIDs[i]);
+		console.log(form)
+		form.value = field.innerText;
+	}
+	document.getElementById("editBookId").value = bookId;
 }

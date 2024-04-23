@@ -65,64 +65,6 @@ export class User {
         }
     }
 
-    isNull(value) {
-        return value === null || value === undefined;
-    }
-
-    validateBook(book){
-        if(book.title){
-            if(book.title.length > 100){
-                return false;
-            }
-        }else{
-            return false;
-        }
-
-        if(!this.isNull(book.author)){
-            if(book.author.length > 100){
-                return false;
-            }
-        }else{
-            return false;
-        }
-
-        if(!this.isNull(book.publisher)){
-            if(book.publisher.length > 100){
-                return false;
-            }
-        }else{
-            return false;
-        }
-
-        if(this.isNull(book.year)){
-            return false;
-        }else{
-        for(let i = 0; i < book.year.length; i++){
-            if(!(book.year[i] >= 48 && book.year[i] <= 57)){
-                return false;
-            }
-        }
-        }
-
-
-        if(!this.isNull(book.category)){
-            if(book.category.length > 50){
-                return false;
-            }
-        }else{
-            return false;
-        }
-
-
-        const isbnRegex = /^[0-9]{3}-[0-9]{10}$/;
-        const isValidISBN = isbnRegex.test(isbn);
-
-        if (!isValidISBN) {
-            return false;
-        }
-        return true;
-    }
-
     async removeById(bookId) {
         try {
             // Remove book from the database by book ID
@@ -146,6 +88,74 @@ export class User {
             console.error('Error updating password:', error);
         }
     }
+
+    async editBook(bookId, newBook) {
+        try {
+            await this.addBook(newBook);
+            await this.removeById(bookId);
+        } catch (error) {
+            console.log('Error editing book:', error);
+        }
+    }
+}
+
+function isNull(value) {
+    return value === null || value === undefined;
+}
+
+export function validateBook(book){
+    if(book.title){
+        if(book.title.length > 100){
+            return false;
+        }
+    }else{
+        return false;
+    }
+
+    if(!isNull(book.author)){
+        if(book.author.length > 100){
+            return false;
+        }
+    }else{
+        return false;
+    }
+
+
+    if(!isNull(book.publisher)){
+        if(book.publisher.length > 100){
+            return false;
+        }
+    }else{
+        return false;
+    }
+
+    if(isNull(book.year)){
+        return false;
+    }else{
+    for(let i = 0; i < book.year.length; i++){
+        if(!(book.year[i] >= '0' && book.year[i] <= '9')){
+            return false;
+        }
+    }
+    }
+
+
+    if(!isNull(book.category)){
+        if(book.category.length > 50){
+            return false;
+        }
+    }else{
+        return false;
+    }
+
+
+    const isbnRegex = /^[0-9]{3}-[0-9]{10}$/;
+    const isValidISBN = book.isbn === '' || isbnRegex.test(book.isbn);
+
+    if (!isValidISBN) {
+        return false;
+    }
+    return true;
 }
 
 //return a User object for the given username

@@ -3,7 +3,7 @@ import bodyParser from 'body-parser'
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
 import ejs from 'ejs';
-import { findUsernameByEmail, addPendingUser, confirmRegistration, User, Book, checkCredentials, getUser, initDatabaseConnection, isUsernameAvailable, createUser, validateUserData } from './data_interface.mjs'
+import { validateBook, findUsernameByEmail, addPendingUser, confirmRegistration, User, Book, checkCredentials, getUser, initDatabaseConnection, isUsernameAvailable, createUser, validateUserData } from './data_interface.mjs'
 import jwt from 'jsonwebtoken'
 import { randomInt } from 'crypto';
 import cookieParser from 'cookie-parser';
@@ -279,6 +279,25 @@ server.post("/delete_book", async (req, res, next) => {
     await getUser(req.username).removeById(delete_book_params[0]);
     res.redirect('/homepage.html');
   }
+})
+
+server.post("/edit_book", async (req, res, next) => {
+  console.log("edit_book_params: ", req.body)
+  let newBook = new Book(
+    req.body.editBookName,
+    req.body.editBookAuthor,
+    req.body.editBookPublisher,
+    req.body.editBookYear,
+    req.body.editBookISBN,
+    req.body.editBookCategory
+  );
+  let valid = validateBook(newBook);
+  console.log(valid)
+  if (valid) {
+    await getUser(req.username).editBook(req.body.editBookId, newBook);
+  }
+
+  res.redirect('/homepage.html');
 })
 
 server.get('/', (req, res, next) => {
