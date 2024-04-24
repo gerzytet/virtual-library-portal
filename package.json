@@ -19,6 +19,7 @@
     "cookie-parser": "1.4.x",
     "jsonwebtoken": "9.0.x",
     "form-data": "4.0.x",
-    "mailgun.js": "10.2.x"
+    "mailgun.js": "10.2.x",
+    "bcrypt": "5.1.1"
   }
 }

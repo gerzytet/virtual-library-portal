@@ -13,6 +13,6 @@ CREATE TABLE Books (
 CREATE TABLE Users (
     UserID SERIAL PRIMARY KEY,
     Username VARCHAR(50) NOT NULL,
-    Password VARCHAR(50) NOT NULL,
+    Password VARCHAR(255) NOT NULL,
     Email VARCHAR(100) NOT NULL
 );

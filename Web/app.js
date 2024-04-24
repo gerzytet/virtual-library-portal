@@ -140,7 +140,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 logoutButton.addEventListener('click', () => {
-	window.location.href = 'index.html';
+	window.location.href = 'logout.html';
 });
 
 function deleteBook(bookId) {

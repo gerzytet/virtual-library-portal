@@ -1,6 +1,7 @@
 import e from 'express';
 import fs from 'fs';
 import pkg from 'pg';
+import bcrypt from 'bcrypt';
 const { Client } = pkg;
 
 export class Book {
@@ -129,7 +130,8 @@ export class User {
     async setPassword(password) {
         try {
             // Update password in the database with username
-            const result = await client.query('UPDATE users SET password = $1 WHERE username = $2', [password, this.username]);
+            const hashword = await bcrypt.hash(password, 9);
+            const result = await client.query('UPDATE users SET password = $1 WHERE username = $2', [hashword, this.username]);
             console.log('Password updated successfully:', result.rows[0]);
         } catch (error) {
             console.error('Error updating password:', error);
@@ -222,14 +224,19 @@ export function validateUserData(username, email, password) {
 }
 
 export async function createUser(username, email, password) {
-    let result = await client.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, password])
+    const hashword = await bcrypt.hash(password, 9);
+    let result = await client.query('INSERT INTO users (username, email, password) VALUES ($1, $2, $3)', [username, email, hashword])
     return result.rowCount > 0;
 }
 
 //return true if the given username and password are valid credentials
 export async function checkCredentials(username, password) {
-    let result = await client.query('SELECT * FROM users WHERE username = $1 AND password = $2', [username, password])
-    return result.rowCount > 0;
+    let result = await client.query('SELECT * FROM users WHERE username = $1', [username])
+    if (result.rowCount === 0) {
+        return false;
+    }
+    const hashword = result.rows[0].password;
+    return await bcrypt.compare(password, hashword);
 }
 
 var client;

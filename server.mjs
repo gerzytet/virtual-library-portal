@@ -209,6 +209,11 @@ server.get("/reset-password-success.html", (req, res, next) => {
   res.sendFile(__dirname + '/Web/reset-password-success.html');
 });
 
+server.get("/logout.html", (req, res, next) => {
+  res.clearCookie("token")
+  res.redirect('/index.html');
+})
+
 //server authentication wall.
 //any route after this will require a valid jwt token
 server.use('/', (req, res, next) => {
