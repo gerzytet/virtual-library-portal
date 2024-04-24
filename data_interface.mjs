@@ -213,6 +213,11 @@ export function getUser(username) {
 }
 
 export async function isUsernameAvailable(username) {
+    for (let user of pendingUsers) {
+        if (user.username === username) {
+            return false;
+        }
+    }
     let result = await client.query('SELECT * FROM users WHERE username = $1', [username])
     return result.rowCount === 0;
 }
@@ -281,4 +286,8 @@ export async function findUsernameByEmail(email) {
         return null;
     }
     return result.rows[0].username;
+}
+
+export function getClient() {
+    return client;
 }
