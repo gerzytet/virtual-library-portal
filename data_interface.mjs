@@ -56,15 +56,15 @@ export class User {
             let param_counter = 1;
             // Check each field of the book struct and add conditions to the query as necessary
             if (title !== '') {
-                query += ' AND title LIKE $' + (param_counter++);
+                query += ' AND title ILIKE $' + (param_counter++);
                 query_params.push('%' + title + '%');
             }
             if (author !== '') {
-                query += ' AND author LIKE $' + (param_counter++);
+                query += ' AND author ILIKE $' + (param_counter++);
                 query_params.push('%' + author + '%');
             }
             if (publisher !== '') {
-                query += ' AND publisher LIKE $' + (param_counter++);
+                query += ' AND publisher ILIKE $' + (param_counter++);
                 query_params.push('%' + publisher + '%');
             }
             if (year !== '') {
@@ -72,11 +72,11 @@ export class User {
                 query_params.push(year);
             }
             if (isbn !== '') {
-                query += ' AND isbn LIKE $' + (param_counter++);
+                query += ' AND isbn ILIKE $' + (param_counter++);
                 query_params.push('%' + isbn + '%');
             }
             if (category !== '') {
-                query += ' AND category LIKE $' + (param_counter++);
+                query += ' AND category ILIKE $' + (param_counter++);
                 query_params.push('%' + category + '%');
             }
 

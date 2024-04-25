@@ -48,6 +48,7 @@ async function testBookFunctions() {
     assert((await test.searchBookCollection(new Book("","","","2021","",""))).length === 1)
     assert((await test.searchBookCollection(new Book("","","","","222-",""))).length === 1)
     assert((await test.searchBookCollection(new Book("","","","","","ateg"))).length === 1)
+    assert((await test.searchBookCollection(new Book("","","","","","ATEG"))).length === 1)
     let id = (await test.getBookCollection())[0].id
     await test.editBook(id, new Book("title2", "author2", "publisher2", "2022", "222-1234567891", "category2"))
     assert((await test.getBookCollection())[0].title === "title2")
