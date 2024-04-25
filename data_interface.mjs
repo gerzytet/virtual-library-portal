@@ -84,9 +84,14 @@ export class User {
 
             // Execute the query with appropriate parameters
             const result = await client.query(query, query_params);
+            const books = result.rows.map(row => {
+                let book = new Book(row.title, row.author, row.publisher, row.yearpublished, row.isbn, row.category);
+                book.id = row.bookid;
+                return book;
+            });
 
             // Return the search results
-            return result.rows;
+            return books;
         } catch (error) {
             console.error('Error searching for book:', error);
             throw error; // Rethrow the error for handling in the caller function

@@ -295,6 +295,7 @@ server.post('/add_book', async (req, res, next) => {
 
 server.post("/delete_book", async (req, res, next) => {
   var delete_book_params = [req.body.deleteBookId]
+  console.log(delete_book_params)
   if (containsNoUndefined(delete_book_params)) {
     await getUser(req.username).removeById(delete_book_params[0]);
     res.redirect('/homepage.html');
