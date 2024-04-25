@@ -48,7 +48,17 @@ async function testBookFunctions() {
     assert((await test.searchBookCollection(new Book("","","","2021","",""))).length === 1)
     assert((await test.searchBookCollection(new Book("","","","","222-",""))).length === 1)
     assert((await test.searchBookCollection(new Book("","","","","","ateg"))).length === 1)
-
+    let id = (await test.getBookCollection())[0].id
+    await test.editBook(id, new Book("title2", "author2", "publisher2", "2022", "222-1234567891", "category2"))
+    assert((await test.getBookCollection())[0].title === "title2")
+    assert((await test.getBookCollection())[0].author === "author2")
+    assert((await test.getBookCollection())[0].publisher === "publisher2")
+    assert((await test.getBookCollection())[0].year === 2022)
+    assert((await test.getBookCollection())[0].isbn === "222-1234567891")
+    assert((await test.getBookCollection())[0].category === "category2")
+    id = (await test.getBookCollection())[0].id
+    await test.removeById(id)
+    assert((await test.getBookCollection()).length === 0)
 
     let valid = [
         new Book("title", "author", "publisher", '2021', "222-1234567890", "category"),
