@@ -139,10 +139,10 @@ server.get('/confirm-registration.html', (req, res, next) => {
   }
 })
 
-server.post('/forgot_password', (req, res, next) => {
+server.post('/forgot_password', async (req, res, next) => {
   let email = req.body.email;
   if (email) {
-    let username = findUsernameByEmail(email);
+    let username = await findUsernameByEmail(email);
     if (username) {
       let forgot_token = jwt.sign({forgotPasswordEmail: email}, jwt_secret, {expiresIn: "1h"})
       let urlEncodedToken = encodeURIComponent(forgot_token)
